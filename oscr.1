@@ -1,0 +1,119 @@
+.TH OSCR 1
+.SH NAME
+oscr \-
+local router for Open Sound Control (\s-1OSC\s0)
+.
+.SH SYNOPSIS
+.B oscr
+.RB [ \-uth ]
+.RB [ \-p
+.IR port ]
+.I config
+.br
+.B oscr
+.RB [ \-uth ]
+.RB [ \-p
+.IR port ]
+<
+.I config
+.
+.SH DESCRIPTION
+.B oscr
+is a simple local router for Open Sound Control (\s-1OSC\s0).
+It allows multiple hosts on the same machine to receive messages from
+.SM OSC
+clients via a unified port.
+.PP
+.B oscr
+reads routing information from a config file.
+The syntax of the config file is very simple:
+.PP
+.in +4n
+.EX
+# comments
+path -> port
+# or alternatively
+port <- path
+.EE
+.in
+.PP
+.
+You can find an exmaple config file in the
+.B EXAMPLE CONIGS
+section.
+.PP
+After setting up a config file, you can start the router on port
+.B 10000
+with the default UDP protocol by executing
+.PP
+.in +4n
+.EX
+$ \fBoscr\fP -p10000 config
+.EE
+.in
+.PP
+or alternatively with TCP protocol by
+.PP
+.in +4n
+.EX
+$ \fBoscr\fP -t -p10000 config
+.EE
+.in
+.PP
+After the router is running, any messages sent to port
+.B 10000
+will be dispatched to corresponding hosts specified in the config.
+.SH OPTIONS
+.TP
+.B \-h
+Print usage and exit.
+.TP
+.B \-u
+Start
+.SM OSC
+server in
+.SM UDP
+mode.
+.SM UDP
+is used by default even if this option is not specified.
+.TP
+.B \-t
+Start
+.SM OSC
+server in
+.SM TCP
+mode.
+.TP
+.BI \-p " port"
+Specify the listening port number.
+If not set, an unused port will be chosen by the system.
+.
+.SH EXAMPLE CONFIGS
+The config file below routes messages from
+.B /1/push1
+to
+.B localhost:10001
+and messages from
+.B /1/push2
+to
+.BR localhost:10002 .
+.PP
+.in +4n
+.EX
+# example config
+/1/push1 -> 10001
+/1/push2 -> 10002
+.EE
+.in
+.PP
+You can alternatively reverse the arrows:
+.PP
+.in +4n
+.EX
+# example config
+10001 <- /1/push1
+10002 <- /1/push2
+.EE
+.in
+.PP
+The two examples above behave exactly the same.
