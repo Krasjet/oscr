@@ -3,6 +3,7 @@
 #define OSCR_CONFIG_H
 
 #include <lo/lo.h>
+#include <stdio.h>
 
 struct oscr_route {
   char *from;
@@ -16,12 +17,15 @@ struct oscr_config {
 };
 
 /**
- * load config from stdin
+ * load config from stream
+ *
+ * ASSUMES:
+ *   f != NULL
  *
  * returns:
  *   number of loaded routes
  */
-int config_load(struct oscr_config *config);
+int config_load(struct oscr_config *config, FILE *f);
 
 /**
  * free config struct

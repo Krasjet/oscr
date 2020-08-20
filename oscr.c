@@ -49,7 +49,8 @@ sig_handler(int signum)
 static void
 usage(const char *name)
 {
-  fprintf(stdout, "usage: %s [-uth] [-p port]\n", name);
+  fprintf(stdout, "usage: %s [-uth] [-p port] config\n", name);
+  fprintf(stdout, "usage: %s [-uth] [-p port] < config\n", name);
 }
 
 int
@@ -57,6 +58,7 @@ main(int argc, char *argv[])
 {
   char *port = NULL;
   struct oscr_config config;
+  FILE *config_fp = stdin;
   int ret;
   int proto = LO_DEFAULT;
 
@@ -81,9 +83,20 @@ main(int argc, char *argv[])
     }
   }
 
-  ret = config_load(&config);
+  if (optind < argc) { /* read config from file */
+    config_fp = fopen(argv[optind], "r");
+    if (!config_fp)
+      die("can't open config file");
+  } else if (isatty(fileno(stdin))) { /* no input and no config in argv */
+    die("no config given");
+  }
+
+  ret = config_load(&config, config_fp);
   if (ret <= 0)
     die("no routes loaded");
+
+  if (config_fp != stdin)
+    fclose(config_fp);
 
   lo_server_thread st = lo_server_thread_new_with_proto(port, proto, err_handler);
   switch (proto) {

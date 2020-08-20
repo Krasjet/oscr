@@ -1,6 +1,5 @@
 /* config.c: config file loader */
 #include <stdlib.h>
-#include <stdio.h>
 #include <ctype.h>
 #include <string.h>
 
@@ -97,7 +96,7 @@ parse_direction(const char *s, enum Direction *dir)
 }
 
 int
-config_load(struct oscr_config *config)
+config_load(struct oscr_config *config, FILE *f)
 {
   char *line = NULL;
   size_t cap = 0;
@@ -107,7 +106,7 @@ config_load(struct oscr_config *config)
 
   config->routes = NULL;
 
-  while ((len = getline(&line, &cap, stdin)) > 0) {
+  while ((len = getline(&line, &cap, f)) > 0) {
     const char *s = line;
     char *fst, *snd;
     enum Direction dir;
