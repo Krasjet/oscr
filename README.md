@@ -25,6 +25,14 @@ For example,
 This config above routes messages from `/1/push1` to `localhost:10001` and
 messages from `/1/push2` to `localhost:10002`.
 
+You can also use `*` for wildcard patterns, for example,
+
+    /1/* -> 10001
+    /2/* -> 10002
+
+but it requires a patched version of liblo. See *Patch liblo* section below for
+details.
+
 After setting up a config file, you can start the router on port 10000 with the
 default UDP protocol by executing
 
@@ -64,6 +72,27 @@ to build oscr and
     # make install
 
 to install it on your system.
+
+Patch liblo
+-----------
+
+If you want to use wildcard patterns in config file, you need a patched version
+of liblo. First clone the repository:
+
+    $ git clone https://github.com/radarsat1/liblo.git
+    $ cd liblo
+
+Apply the patch:
+
+    $ curl -L https://github.com/radarsat1/liblo/pull/109.patch | git am
+
+Then build and install the patched library:
+
+    $ ./autogen.sh
+    # make install
+
+Finally, follow the instruction in previous section to rebuild oscr.
+
 
 [1]: http://opensoundcontrol.org/
 [2]: http://liblo.sourceforge.net/
