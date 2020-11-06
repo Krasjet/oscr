@@ -50,7 +50,7 @@ static void
 usage(const char *name)
 {
   fprintf(stdout, "usage: %s [-uth] [-p port] config\n", name);
-  fprintf(stdout, "usage: %s [-uth] [-p port] < config\n", name);
+  fprintf(stdout, "       %s [-uth] [-p port] < config\n", name);
 }
 
 int
