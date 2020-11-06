@@ -171,8 +171,7 @@ nextline:
     lineno++;
   }
 
-  if (line)
-    free(line);
+  free(line);
 
   return count;
 }
