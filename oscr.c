@@ -99,13 +99,14 @@ main(int argc, char *argv[])
     fclose(config_fp);
 
   lo_server_thread st = lo_server_thread_new_with_proto(port, proto, err_handler);
+
   switch (proto) {
   case LO_DEFAULT:
   case LO_UDP:
-    info("udp server running on port %s", port);
+    info("udp server running on port %d", lo_server_thread_get_port(st));
     break;
   case LO_TCP:
-    info("tcp server running on port %s", port);
+    info("tcp server running on port %d", lo_server_thread_get_port(st));
     break;
   }
 
