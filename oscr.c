@@ -10,7 +10,7 @@
 #include "config.h"
 #include "util.h"
 
-static int running;
+static volatile int running;
 
 static void
 err_handler(int num, const char *msg, const char *path)
