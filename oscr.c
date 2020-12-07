@@ -16,9 +16,8 @@ static void
 err_handler(int num, const char *msg, const char *path)
 {
   (void) num;
-  (void) msg;
   (void) path;
-  die("fail to start osc server");
+  die(msg);
 }
 
 static int
