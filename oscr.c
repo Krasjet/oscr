@@ -15,9 +15,17 @@ static volatile int running;
 static void
 err_handler(int num, const char *msg, const char *path)
 {
-  (void) num;
-  (void) path;
-  die(msg);
+  switch (num) {
+  case LO_NOPORT:
+  case LO_UNKNOWNPROTO:
+    die("fail to start osc server");
+    break;
+  default:
+    if (path)
+      warn("%s: %s", path, msg);
+    else
+      warn("%s", msg);
+  }
 }
 
 static int
