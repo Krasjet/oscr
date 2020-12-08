@@ -1,0 +1,9 @@
+# example config for unix domain socket
+
+/1/push1 -> /tmp/1.sock
+/1/push2 -> /tmp/2.sock
+/1/push3 -> /tmp/3.sock
+/1/push4 -> /tmp/4.sock
+
+/1/* -> /tmp/5.sock
+/2/* -> /tmp/6.sock

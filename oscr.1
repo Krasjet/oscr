@@ -6,14 +6,22 @@ local router for Open Sound Control (\s-1OSC\s0)
 .SH SYNOPSIS
 .B oscr
 .RB [ \-uth ]
+.RB [ \-U
+.IR socket ]
 .RB [ \-p
 .IR port ]
+.RB [ \-o
+.IR proto ]
 .I config
 .br
 .B oscr
 .RB [ \-uth ]
+.RB [ \-U
+.IR socket ]
 .RB [ \-p
 .IR port ]
+.RB [ \-o
+.IR proto ]
 <
 .I config
 .
@@ -44,7 +52,7 @@ section.
 .PP
 After setting up a config file, you can start the router on port
 .B 10000
-with the default UDP protocol by executing
+with the default \s-1UDP\s0 protocol by executing
 .PP
 .in +4n
 .EX
@@ -52,7 +60,7 @@ $ \fBoscr\fP -p10000 config
 .EE
 .in
 .PP
-or alternatively with TCP protocol by
+or alternatively with \s-1TCP\s0 protocol by
 .PP
 .in +4n
 .EX
@@ -60,8 +68,21 @@ $ \fBoscr\fP -t -p10000 config
 .EE
 .in
 .PP
-After the router is running, any messages sent to port
+You can also use \s-1UNIX\s0 domain sockets with the
+.B -U
+option
+.PP
+.in +4n
+.EX
+$ \fBoscr\fP -U/tmp/osc.sock config
+.EE
+.in
+.PP
+After the router is running, any messages sent to the designated port or socket
+(in this case
 .B 10000
+or
+.BR /tmp/osc.sock )
 will be dispatched to corresponding hosts specified in the config.
 .SH OPTIONS
 .TP
@@ -84,11 +105,37 @@ server in
 .SM TCP
 mode.
 .TP
+.BI \-U " socket"
+Start server in \s-1UNIX\s0 domain socket mode.
+.I socket
+specifies the listening socket.
+.TP
 .BI \-p " port"
-Specify the listening port number.
+Specify the listening port number for \s-1UDP\s0 or \s-1TCP\s0 protocol.
 It can also be a service name in
 .BR /etc/services .
 If not set, an unused port will be chosen by the system.
+.
+This option is ignored if
+.B \-U
+flag is set.
+.TP
+.BI \-o " proto"
+Set the protocol for outgoing messages. The option
+.I proto
+must be one of
+.B u
+for \s-1UDP\s0,
+.B t
+for \s-1TCP\s0, and
+.B U
+for \s-1UNIX\s0 domain socket. The default for
+.I proto
+is
+.B u
+for \s-1UDP\s0 and \s-1TCP\s0 mode, and
+.B U
+for \s-1UNIX\s0 domain socket mode.
 .
 .SH EXAMPLE CONFIGS
 The config file below routes messages from
@@ -119,3 +166,14 @@ You can alternatively reverse the arrows:
 .in
 .PP
 The two examples above behave exactly the same.
+.PP
+For \s-1UNIX\s0 domain sockets, use socket paths instead of port numbers:
+.PP
+.in +4n
+.EX
+# example config for UNIX domain socket
+/1/push1 -> /tmp/1.sock
+/1/push2 -> /tmp/2.sock
+.EE
+.in
+.PP

@@ -25,7 +25,7 @@ For example,
 This config above routes messages from `/1/push1` to `localhost:10001` and
 messages from `/1/push2` to `localhost:10002`.
 
-You can also use `*` for wildcard patterns, for example,
+You can also use wildcard patterns, for example,
 
     /1/* -> 10001
     /2/* -> 10002
@@ -38,12 +38,17 @@ default UDP protocol by executing
 
     $ oscr -p10000 config
 
-or alternatively with TCP protocol by
+or alternatively with TCP protocol
 
     $ oscr -t -p10000 config
 
-After the router is running, any messages sent to port 10000 will be dispatched
-to corresponding hosts specified in the config.
+You can also use UNIX domain sockets with the `-U` option
+
+    $ oscr -U/tmp/osc.sock config
+
+After the router is running, any messages sent to the designated port or socket
+(in this case 10000 or `/tmp/osc.sock`) will be dispatched to corresponding
+hosts specified in the config.
 
 See also `oscr(1)`.
 
@@ -51,7 +56,7 @@ Build
 -----
 
 oscr currently depends on liblo [2]. I might remove the dependency eventually,
-but for the time being there is no motivation to do so.
+but for the time being I see no motivation to do so.
 
 For Arch-based distros, it can be installed by
 

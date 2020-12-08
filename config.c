@@ -96,7 +96,7 @@ parse_direction(const char *s, enum Direction *dir)
 }
 
 int
-config_load(struct oscr_config *config, FILE *f)
+config_load(struct oscr_config *config, FILE *f, int proto)
 {
   char *line = NULL;
   size_t cap = 0;
@@ -158,7 +158,7 @@ config_load(struct oscr_config *config, FILE *f)
       route->to = snd;
       break;
     }
-    route->addr = lo_address_new(NULL, route->to);
+    route->addr = lo_address_new_with_proto(proto, NULL, route->to);
     if (!route->addr) {
       warn("unable to create address, skipping line %lu", lineno);
       route_free(route);

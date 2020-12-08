@@ -25,7 +25,7 @@ struct oscr_config {
  * returns:
  *   number of loaded routes
  */
-int config_load(struct oscr_config *config, FILE *f);
+int config_load(struct oscr_config *config, FILE *f, int proto);
 
 /**
  * free config struct
