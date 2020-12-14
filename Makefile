@@ -1,6 +1,8 @@
 .POSIX:
 
 PREFIX  = /usr/local
+
+CC = cc
 CFLAGS  = -Wall -Wextra -std=c99 -pedantic -Os -D_GNU_SOURCE
 LDLIBS  = -llo
 LDFLAGS =
@@ -9,6 +11,9 @@ OBJ = oscr.o util.o config.o
 
 oscr: $(OBJ)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(OBJ) $(LDLIBS)
+
+oscr.o: config.h util.h
+config.o: util.h
 
 clean:
 	rm -f oscr *.o
