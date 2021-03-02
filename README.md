@@ -1,15 +1,15 @@
 oscr
 ====
 
-oscr is a simple local router for Open Sound Control (OSC) [1]. It allows
-multiple hosts on the same machine to receive messages from OSC clients via a
-unified port.
+oscr is a simple local router for Open Sound Control (OSC) [1].
+It allows multiple hosts on the same machine to receive
+messages from OSC clients via a unified port.
 
 Usage
 -----
 
-oscr reads routing information from a config file. The syntax of the config
-file is very simple:
+oscr reads routing information from a config file. The
+syntax of the config file is very simple:
 
     # comments
     path -> port
@@ -22,19 +22,20 @@ For example,
     /1/push1 -> 10001
     /1/push2 -> 10002
 
-This config above routes messages from `/1/push1` to `localhost:10001` and
-messages from `/1/push2` to `localhost:10002`.
+This config above routes messages from `/1/push1` to
+`localhost:10001` and messages from `/1/push2` to
+`localhost:10002`.
 
 You can also use wildcard patterns, for example,
 
     /1/* -> 10001
     /2/* -> 10002
 
-but it requires a patched version of liblo (already merged into main branch).
-See *Patch liblo* section below for details.
+but it requires a cutting-edge version of liblo. See *Compile
+liblo* section below for details.
 
-After setting up a config file, you can start the router on port 10000 with the
-default UDP protocol by executing
+After setting up a config file, you can start the router on
+port 10000 with the default UDP protocol by executing
 
     $ oscr -p10000 config
 
@@ -46,17 +47,19 @@ You can also use UNIX domain sockets with the `-U` option
 
     $ oscr -U/tmp/osc.sock config
 
-After the router is running, any messages sent to the designated port or socket
-(in this case 10000 or `/tmp/osc.sock`) will be dispatched to corresponding
-hosts specified in the config.
+After the router is running, any messages sent to the
+designated port or socket (in this case 10000 or
+`/tmp/osc.sock`) will be dispatched to corresponding hosts
+specified in the config.
 
 See also `oscr(1)`.
 
 Build
 -----
 
-oscr currently depends on liblo [2]. I might remove the dependency eventually,
-but for the time being I see no motivation to do so.
+oscr currently depends on liblo [2]. I might remove the
+dependency eventually, but for the time being I see no
+motivation to do so.
 
 For Arch-based distros, it can be installed by
 
@@ -68,7 +71,8 @@ For Debian-based distros, install by
 
 or alternatively you can compile from source.
 
-You also need a C99-compatible C compiler and POSIX make. Run
+You also need a C99-compatible C compiler and POSIX make.
+Run
 
     $ make
 
@@ -78,28 +82,28 @@ to build oscr and
 
 to install it on your system.
 
-Patch liblo
------------
+Compile liblo
+-------------
 
-The following instructions has been deprecated since my patch has been merged
-into the main branch.
+I sent a patch to liblo a while ago to fix its wildcard
+pattern support. Although it has been merged in to the main
+branch, there hasn't been any new releases.
 
-If you want to use wildcard patterns in config file, you need a patched version
-of liblo. First clone the repository:
+Therefore, if you want to use the wildcard pattern support,
+you need to compile liblo from source.
+
+First clone the repository:
 
     $ git clone https://github.com/radarsat1/liblo.git
     $ cd liblo
 
-Apply the patch:
-
-    $ curl -L https://github.com/radarsat1/liblo/pull/109.patch | git am
-
-Then build and install the patched library:
+Then build and install it to your system:
 
     $ ./autogen.sh
     # make install
 
-Finally, follow the instruction in previous section to rebuild oscr.
+Finally, follow the instruction in previous section to
+rebuild oscr.
 
 
 [1]: http://opensoundcontrol.org/
