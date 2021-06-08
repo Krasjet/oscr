@@ -164,10 +164,12 @@ main(int argc, char *argv[])
   }
 
   /* catch signal for grace shutdown */
-  signal(SIGQUIT, sig_handler);
   signal(SIGTERM, sig_handler);
-  signal(SIGHUP, sig_handler);
   signal(SIGINT, sig_handler);
+#ifndef _WIN32
+  signal(SIGQUIT, sig_handler);
+  signal(SIGHUP, sig_handler);
+#endif
 
   lo_server_thread_start(st);
 
