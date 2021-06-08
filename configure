@@ -1,0 +1,39 @@
+#!/bin/sh
+
+die() {
+  printf "error: %s\n" "$1"
+  exit 1
+}
+
+check_pc() {
+  printf "checking for pkg-config..."
+  if command -v pkg-config >/dev/null; then
+    echo yes
+  else
+    echo no
+    die "pkg-config not found."
+  fi
+}
+
+check_pc
+
+printf "checking for liblo..."
+if ! pkg-config liblo; then
+  echo "no"
+  die "please make sure liblo is installed."
+fi
+echo "yes"
+LO_CFLAGS=$(pkg-config --cflags liblo)
+LO_LDLIBS=$(pkg-config --libs liblo)
+
+# liblo uses the unreliable WIN32 flag to check for Windows
+case "$(uname)" in
+  CYGWIN*|MINGW*|MSYS*)
+		LO_CFLAGS="${LO_CFLAGS} -DWIN32"
+    ;;
+esac
+
+cat <<EOF > config.mk
+LO_CFLAGS=${LO_CFLAGS}
+LO_LDLIBS=${LO_LDLIBS}
+EOF

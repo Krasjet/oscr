@@ -1,10 +1,10 @@
-.POSIX:
+include config.mk
 
 PREFIX  = /usr/local
 
 CC = cc
-CFLAGS  = -Wall -Wextra -std=c99 -pedantic -Os -D_GNU_SOURCE
-LDLIBS  = -llo
+CFLAGS  = -Wall -Wextra -std=c99 -pedantic -Os -D_GNU_SOURCE $(LO_CFLAGS)
+LDLIBS  = $(LO_LDLIBS)
 LDFLAGS =
 
 OBJ = oscr.o util.o config.o

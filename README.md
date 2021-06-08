@@ -74,6 +74,7 @@ or alternatively you can compile from source.
 You also need a C99-compatible C compiler and POSIX make.
 Run
 
+    $ ./configure
     $ make
 
 to build oscr and
