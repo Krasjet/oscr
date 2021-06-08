@@ -3,7 +3,7 @@ include config.mk
 PREFIX  = /usr/local
 
 CC = cc
-CFLAGS  = -Wall -Wextra -std=c99 -pedantic -Os -D_GNU_SOURCE $(LO_CFLAGS)
+CFLAGS  = -Wall -Wextra -std=c99 -pedantic -Os -D_POSIX_C_SOURCE $(LO_CFLAGS)
 LDLIBS  = $(LO_LDLIBS)
 LDFLAGS =
 

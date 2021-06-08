@@ -95,6 +95,54 @@ parse_direction(const char *s, enum Direction *dir)
   return s + 2;
 }
 
+ssize_t getln(char **lineptr, size_t *n, FILE *stream) {
+  char *curr;
+  int c;
+
+  if (!lineptr || !n || !stream) {
+    return -1;
+  }
+
+  if (!*lineptr) {
+    *n = BUFSIZ;
+    *lineptr = malloc(*n);
+    if (!*lineptr)
+      return -1;
+  }
+
+  for (curr = *lineptr;;) {
+    c = getc(stream);
+
+    if (ferror(stream))
+      return -1;
+
+    if (c == EOF) {
+      if (curr == *lineptr)
+        return -1;
+      else
+       break;
+    }
+
+    if ((*lineptr + *n - curr) < 2) {
+      size_t nlen = *n * 2;
+      char *nlineptr = realloc(*lineptr, nlen);
+      if (!nlineptr)
+        return -1;
+
+      curr = nlineptr + (curr - *lineptr);
+      *lineptr = nlineptr;
+      *n = nlen;
+    }
+
+    *curr++ = (char)c;
+    if (c == '\n')
+      break;
+  }
+
+  *curr = '\0';
+  return (ssize_t)(curr - *lineptr);
+}
+
 int
 config_load(struct oscr_config *config, FILE *f, int proto)
 {
@@ -106,7 +154,7 @@ config_load(struct oscr_config *config, FILE *f, int proto)
 
   config->routes = NULL;
 
-  while ((len = getline(&line, &cap, f)) > 0) {
+  while ((len = getln(&line, &cap, f)) > 0) {
     const char *s = line;
     char *fst, *snd;
     enum Direction dir;
